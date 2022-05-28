@@ -1,0 +1,49 @@
+<ngb-toast *ngFor="let toast of toastService.toasts" [autohide]="toast.autohide"
+    [delay]="toast.delay" (hidden)="toastService.remove(toast)" #t="ngbToast">
+
+    <button type="button" class="btn-close" (click)="closeToast(t, toast)"></button>
+
+    <span class="icon" [ngClass]="toast.typeClass">
+        <i class="bi" [ngClass]="toast.iconClass"></i>
+    </span>
+    <span class="message">
+        {{ toast.message }}
+    </span>
+
+</ngb-toast>
+
+<ng-template #success let-toast>
+    <span class="icon bg-success text-light">
+        <i class="bi bi-check-circle"></i>
+    </span>
+    <span class="message">
+        {{ toast.message }}
+    </span>
+</ng-template>
+
+<ng-template #error let-toast>
+    <span class="icon bg-danger text-light">
+        <i class="bi bi-x-circle"></i>
+    </span>
+    <span class="message">
+        {{ toast.message }}
+    </span>
+</ng-template>
+
+<ng-template #warning let-message>
+    <span class="icon bg-warning">
+        <i class="bi bi-exclamation-triangle"></i>
+    </span>
+    <span class="message">
+        {{ message }}
+    </span>
+</ng-template>
+
+<ng-template #info let-message>
+    <span class="icon bg-info">
+        <i class="bi bi-info-circle"></i>
+    </span>
+    <span class="message">
+        {{ message }}
+    </span>
+</ng-template>

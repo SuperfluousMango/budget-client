@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <header>Add a new category</header>
+    <button type="button" class="btn-close" aria-label="Close" (click)="cancelDialog()"></button>
+</div>
+<div class="modal-body" [formGroup]="form">
+    <fieldset>
+        <div>
+            <label class="form-label" for="group-name">Group</label>
+            <input type="text" class="form-control" id="group-name" formControlName="groupName" ngbAutofocus
+                [ngbTypeahead]="searchGroupNames" [resultTemplate]="rt">
+        </div>
+
+        <div>
+            <label class="form-label" for="category-name">Category</label>
+            <input type="text" class="form-control" id="category-name" formControlName="categoryName">
+        </div>
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="cancelDialog()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="saveCategory()" [disabled]="this.form.invalid">Save Category</button>
+</div>
+
+<ng-template #rt let-r="result">
+    {{ r }}
+</ng-template>
