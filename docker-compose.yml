@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+    %Host.ClientName%:
+        container_name: %Host.ClientContainerName%
+        image: budget/client:%Host.ContainerTag%
+        ports:
+            - %Host.ClientExternalPort%:80
+        restart: always
