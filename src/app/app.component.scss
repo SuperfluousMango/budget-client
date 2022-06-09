@@ -1,0 +1,17 @@
+.title-bar {
+    height: 50px;
+    padding: 0 0.5rem;
+    background-color: var(--bs-green);
+    display: flex;
+    align-items: center;
+    
+    a {
+        margin-top: -0.25rem; /* Compensate for crappy extra space at top of font */
+        color: var(--bs-white);
+        text-decoration: none;
+        font-size: 1.625rem;
+        line-height: 1.625rem;
+        font-weight: 600;
+        font-variant: small-caps;
+    }
+}

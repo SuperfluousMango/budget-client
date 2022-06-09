@@ -41,8 +41,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn-secondary" (click)="cancelDialog()">Cancel</button>
     <button type="button" class="btn-primary" (click)="saveTransaction()" [disabled]="this.form.invalid">Save Transaction</button>
+    <button type="button" class="btn-secondary" (click)="cancelDialog()">Cancel</button>
 </div>
 
 <ng-template #rt let-r="result">

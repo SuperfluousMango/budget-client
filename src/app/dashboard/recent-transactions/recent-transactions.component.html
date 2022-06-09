@@ -1,0 +1,21 @@
+<loader *ngIf="loading; else content"></loader>
+<ng-template #content>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Memo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let t of recentTransactions">
+                <td>{{ t.transactionDate | date }}</td>
+                <td>{{ t.amount | currency }}</td>
+                <td>{{ t.memo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" routerLink="TransactionList">View more</a>
+</ng-template>

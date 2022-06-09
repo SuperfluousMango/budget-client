@@ -24,7 +24,7 @@
     ],
     "paths": {
         "@dashboard": [ "./src/app/dashboard/" ],
-        "@ngb-customization": [ "./src/app/ngb-customization/" ],
+        "@shared": [ "./src/lib/shared/" ],
         "@transactions": [ "./src/app/transactions/" ]
     }
   },

@@ -1,3 +1,19 @@
+.table-wrapper {
+    min-height: 300px;
+    max-height: calc(100vh - 50px - 4.5rem - 2rem - 5vh); // header height, h1 height, button height, adjustment just because
+    overflow-y: auto;
+}
+
+table {
+    position: relative;
+}
+
+th {
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+    background-color: var(--bs-white);
+}
+
 th.date {
     width: 125px;
 }

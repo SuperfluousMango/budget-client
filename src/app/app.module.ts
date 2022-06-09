@@ -3,12 +3,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbDateAdapter, NgbDateNativeUTCAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DashboardComponent } from '@dashboard';
+import { NgbDateAdapter, NgbDateNativeAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CustomDateParserFormatter, SharedModule } from '@shared';
+import { TransactionCategoryComponent, TransactionEntryComponent, TransactionListComponent } from '@transactions';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DashboardComponent } from '@dashboard';
-import { CustomDateParserFormatter, ToastsContainerComponent } from '@ngb-customization';
-import { TransactionCategoryComponent, TransactionEntryComponent, TransactionListComponent } from '@transactions';
+import { RecentTransactionsComponent } from './dashboard/recent-transactions/recent-transactions.component';
+import { RecentGroupedTransactionsComponent } from './dashboard/recent-grouped-transactions/recent-grouped-transactions.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
     imports: [
@@ -17,7 +20,9 @@ import { TransactionCategoryComponent, TransactionEntryComponent, TransactionLis
         HttpClientModule,
         ReactiveFormsModule,
         NgbModule,
-        AppRoutingModule
+        NgxChartsModule,
+        AppRoutingModule,
+        SharedModule
     ],
     declarations: [
         AppComponent,
@@ -25,10 +30,11 @@ import { TransactionCategoryComponent, TransactionEntryComponent, TransactionLis
         TransactionListComponent,
         TransactionEntryComponent,
         TransactionCategoryComponent,
-        ToastsContainerComponent
+        RecentTransactionsComponent,
+        RecentGroupedTransactionsComponent
     ],
     providers: [
-        { provide: NgbDateAdapter, useClass: NgbDateNativeUTCAdapter },
+        { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter },
         { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     ],
     bootstrap: [AppComponent]
