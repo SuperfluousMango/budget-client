@@ -1,23 +1,28 @@
-<header class="me-auto">
+<h1 class="me-auto text-center">
     Transactions
-</header>
-<button type="button" class="btn btn-sm btn-primary" (click)="openModal()">Add new transaction</button>
+</h1>
+<button type="button" class="btn btn-sm btn-primary mb-1" (click)="openModal()">Add new transaction</button>
 
-<table class="table table-striped" *ngIf="categories">
-    <thead>
-        <tr>
-            <th class="date">Date</th>
-            <th class="amount">Amount</th>
-            <th class="category">Category</th>
-            <th>Memo</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let t of transactions">
-            <td>{{ t.transactionDate | date : 'M/d/y' }}</td>
-            <td>{{ t.amount | currency }}</td>
-            <td>{{ categories[t.transactionCategoryId] }}</td>
-            <td>{{ t.memo }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-wrapper">
+    <loader *ngIf="loading; else content"></loader>
+    <ng-template #content>
+        <table class="table table-striped" *ngIf="categories">
+            <thead>
+                <tr>
+                    <th class="date">Date</th>
+                    <th class="amount">Amount</th>
+                    <th class="category">Category</th>
+                    <th>Memo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let t of transactions">
+                    <td>{{ t.transactionDate | date : 'M/d/y' }}</td>
+                    <td>{{ t.amount | currency }}</td>
+                    <td>{{ categories[t.transactionCategoryId] }}</td>
+                    <td>{{ t.memo }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-template>
+</div>

@@ -16,9 +16,9 @@
         </div>
     </fieldset>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="cancelDialog()">Cancel</button>
+<div class="modal-footer flex-row-reverse">
     <button type="button" class="btn btn-primary" (click)="saveCategory()" [disabled]="this.form.invalid">Save Category</button>
+    <button type="button" class="btn btn-secondary" (click)="cancelDialog()">Cancel</button>
 </div>
 
 <ng-template #rt let-r="result">

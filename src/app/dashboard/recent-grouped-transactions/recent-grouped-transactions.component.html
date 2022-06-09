@@ -1,0 +1,8 @@
+<loader *ngIf="loading; else content"></loader>
+<ng-template #content>
+    <ngx-charts-pie-chart [view]="[300, 300]" [results]="transactionGroups" scheme="vivid">
+    </ngx-charts-pie-chart>
+    <div class="group-list">
+        <div *ngFor="let g of transactionGroups">{{ g.name }}: {{ g.value | currency }}</div>
+    </div>
+</ng-template>

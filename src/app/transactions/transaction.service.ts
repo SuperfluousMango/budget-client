@@ -4,6 +4,8 @@ import { map, Observable, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Transaction } from './transaction';
 import { GroupedCategories } from './transaction-category';
+import { TransactionGroup } from './transaction-group';
+import { TransactionInfo } from './transaction-info';
 
 @Injectable({
     providedIn: 'root'
@@ -48,6 +50,16 @@ export class TransactionService implements OnDestroy {
             .pipe(
                 tap(() => this.loadCategories())
             );
+    }
+
+    getRecentTransactions(): Observable<TransactionInfo[]> {
+        const url = `${environment.apiUrl}/api/TransactionEntry/Recent`;
+        return this.httpClient.get<TransactionInfo[]>(url);
+    }
+
+    getRecentGroupedTransactions(year: number, month: number): Observable<TransactionGroup[]> {
+        const url = `${environment.apiUrl}/api/TransactionEntry/RecentGrouped/${year}/${month}`;
+        return this.httpClient.get<TransactionGroup[]>(url);
     }
 
     private loadCategories(): void {

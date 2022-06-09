@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastService } from '@ngb-customization';
+import { ToastService } from '@shared';
 import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, switchMap } from 'rxjs';
 import { GroupedCategories } from '../transaction-category';
 import { TransactionService } from '../transaction.service';

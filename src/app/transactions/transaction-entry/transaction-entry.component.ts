@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastService } from '@ngb-customization';
+import { ToastService } from '@shared';
 import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, Subject, takeUntil } from 'rxjs';
 import { TransactionCategory } from '../transaction-category';
 import { TransactionCategoryComponent } from '../transaction-category/transaction-category.component';
@@ -10,7 +10,7 @@ import { TransactionService } from '../transaction.service';
 @Component({
     selector: 'transaction-entry-dialog',
     templateUrl: './transaction-entry.component.html',
-    styleUrls: []
+    styleUrls: ['./transaction-entry.component.scss']
 })
 export class TransactionEntryComponent implements OnDestroy {
     @ViewChild("dateField", { read: ElementRef }) dateField?: ElementRef;
@@ -66,6 +66,9 @@ export class TransactionEntryComponent implements OnDestroy {
             return;
         }
 
+        // NgbDatepicker tries to be clever and sets the time on our dates to noon, in order to keep the UTC
+        // date that JS passes to the API the same as the local date. Since we're only saving the date and
+        // don't care about the time, that is acceptable.
         this.transactionService.saveTransaction({ ...this.form.value, categoryId: this.form.value.category.id })
             .subscribe(() => {
                 this.toastService.showSuccess("Your transaction was successfully saved.");

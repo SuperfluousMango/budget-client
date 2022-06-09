@@ -4,7 +4,7 @@ import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: []
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
     constructor(

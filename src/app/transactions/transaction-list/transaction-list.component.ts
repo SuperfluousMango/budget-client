@@ -11,6 +11,7 @@ import { TransactionService } from '../transaction.service';
     styleUrls: ['./transaction-list.component.scss']
 })
 export class TransactionListComponent implements OnDestroy {
+    loading = true;
     searchDate = new Date();
     transactions: Transaction[] = [];
     categories: { [key: number]: string } | undefined;
@@ -54,10 +55,14 @@ export class TransactionListComponent implements OnDestroy {
     }
 
     private refreshTransactionList(): void {
+        this.loading = true;
         const year = this.searchDate.getFullYear(),
             month = this.searchDate.getMonth() + 1;
 
         this.transactionService.getTransactionsByMonth(year, month)
-            .subscribe(data => this.transactions = data);
+            .subscribe(data => {
+                this.transactions = data;
+                this.loading = false;
+            });
     }
 }
