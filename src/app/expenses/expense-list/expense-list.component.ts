@@ -1,30 +1,30 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, takeUntil } from 'rxjs';
-import { Transaction } from '../transaction';
-import { TransactionEntryComponent } from '../transaction-entry/transaction-entry.component';
-import { TransactionService } from '../transaction.service';
+import { Expense } from '../expense';
+import { ExpenseEntryComponent } from '../expense-entry/expense-entry.component';
+import { ExpenseService } from '../expense.service';
 
 @Component({
-    selector: 'transaction-list',
-    templateUrl: './transaction-list.component.html',
-    styleUrls: ['./transaction-list.component.scss']
+    selector: 'expense-list',
+    templateUrl: './expense-list.component.html',
+    styleUrls: ['./expense-list.component.scss']
 })
-export class TransactionListComponent implements OnDestroy {
+export class ExpenseListComponent implements OnDestroy {
     loading = true;
     searchDate = new Date();
-    transactions: Transaction[] = [];
+    expenses: Expense[] = [];
     categories: { [key: number]: string } | undefined;
 
     private _destroy$ = new Subject<void>();
 
     constructor(
-        private readonly transactionService: TransactionService,
+        private readonly expenseService: ExpenseService,
         private readonly modalService: NgbModal
     ) {
-        this.refreshTransactionList();
+        this.refreshExpenseList();
 
-        this.transactionService.categories$
+        this.expenseService.categories$
             .pipe(takeUntil(this._destroy$))
             .subscribe(data => {
                 this.categories = {};
@@ -34,7 +34,7 @@ export class TransactionListComponent implements OnDestroy {
                 }, this.categories);
             });
 
-        this.transactionService.transactionListUpdate$
+        this.expenseService.expenseListUpdate$
             .pipe(takeUntil(this._destroy$))
             .subscribe(transDate => this.checkForRefresh(transDate));
     }
@@ -45,23 +45,23 @@ export class TransactionListComponent implements OnDestroy {
     }
 
     openModal(): void {
-        this.modalService.open(TransactionEntryComponent);
+        this.modalService.open(ExpenseEntryComponent);
     }
 
     private checkForRefresh(transDate: Date): void {
         if (transDate.getMonth() == this.searchDate.getMonth() && transDate.getFullYear() == this.searchDate.getFullYear()) {
-            this.refreshTransactionList();
+            this.refreshExpenseList();
         }
     }
 
-    private refreshTransactionList(): void {
+    private refreshExpenseList(): void {
         this.loading = true;
         const year = this.searchDate.getFullYear(),
             month = this.searchDate.getMonth() + 1;
 
-        this.transactionService.getTransactionsByMonth(year, month)
+        this.expenseService.getExpensesByMonth(year, month)
             .subscribe(data => {
-                this.transactions = data;
+                this.expenses = data;
                 this.loading = false;
             });
     }

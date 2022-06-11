@@ -1,4 +1,4 @@
-export interface TransactionInfo {
+export interface ExpenseInfo {
     transactionDate: Date;
     amount: number;
     memo: string;

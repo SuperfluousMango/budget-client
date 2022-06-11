@@ -25,7 +25,7 @@
     "paths": {
         "@dashboard": [ "./src/app/dashboard/" ],
         "@shared": [ "./src/lib/shared/" ],
-        "@transactions": [ "./src/app/transactions/" ]
+        "@expenses": [ "./src/app/expenses/" ]
     }
   },
   "angularCompilerOptions": {

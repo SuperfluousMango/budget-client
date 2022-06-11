@@ -6,13 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DashboardComponent } from '@dashboard';
 import { NgbDateAdapter, NgbDateNativeAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateParserFormatter, SharedModule } from '@shared';
-import { TransactionCategoryComponent, TransactionEntryComponent, TransactionListComponent } from '@transactions';
+import { ExpenseCategoryComponent, ExpenseEntryComponent, ExpenseListComponent } from '@expenses';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RecentTransactionsComponent } from './dashboard/recent-transactions/recent-transactions.component';
-import { RecentGroupedTransactionsComponent } from './dashboard/recent-grouped-transactions/recent-grouped-transactions.component';
+import { RecentExpensesComponent } from './dashboard/recent-expenses/recent-expenses.component';
+import { RecentGroupedExpensesComponent } from './dashboard/recent-grouped-expenses/recent-grouped-expenses.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ChartLegendComponent } from './dashboard/recent-grouped-transactions/chart-legend/chart-legend.component';
+import { ChartLegendComponent } from './dashboard/recent-grouped-expenses/chart-legend/chart-legend.component';
 
 @NgModule({
     imports: [
@@ -28,11 +28,11 @@ import { ChartLegendComponent } from './dashboard/recent-grouped-transactions/ch
     declarations: [
         AppComponent,
         DashboardComponent,
-        TransactionListComponent,
-        TransactionEntryComponent,
-        TransactionCategoryComponent,
-        RecentTransactionsComponent,
-        RecentGroupedTransactionsComponent,
+        ExpenseListComponent,
+        ExpenseEntryComponent,
+        ExpenseCategoryComponent,
+        RecentExpensesComponent,
+        RecentGroupedExpensesComponent,
         ChartLegendComponent
     ],
     providers: [

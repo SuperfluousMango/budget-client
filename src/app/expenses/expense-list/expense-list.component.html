@@ -1,7 +1,7 @@
 <h1 class="me-auto text-center">
-    Transactions
+    Expenses
 </h1>
-<button type="button" class="btn btn-sm btn-primary mb-1" (click)="openModal()">Add new transaction</button>
+<button type="button" class="btn btn-sm btn-primary mb-1" (click)="openModal()">Add new expense</button>
 
 <div class="table-wrapper">
     <loader *ngIf="loading; else content"></loader>
@@ -16,11 +16,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let t of transactions">
-                    <td>{{ t.transactionDate | date : 'M/d/y' }}</td>
-                    <td>{{ t.amount | currency }}</td>
-                    <td>{{ categories[t.transactionCategoryId] }}</td>
-                    <td>{{ t.memo }}</td>
+                <tr *ngFor="let e of expenses">
+                    <td>{{ e.transactionDate | date : 'M/d/y' }}</td>
+                    <td>{{ e.amount | currency }}</td>
+                    <td>{{ categories[e.expenseCategoryId] }}</td>
+                    <td>{{ e.memo }}</td>
                 </tr>
             </tbody>
         </table>

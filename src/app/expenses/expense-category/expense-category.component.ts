@@ -3,15 +3,15 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@shared';
 import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, switchMap } from 'rxjs';
-import { GroupedCategories } from '../transaction-category';
-import { TransactionService } from '../transaction.service';
+import { GroupedCategories } from '../expense-category';
+import { ExpenseService } from '../expense.service';
 
 @Component({
-    selector: 'transaction-category',
-    templateUrl: './transaction-category.component.html',
-    styleUrls: ['./transaction-category.component.scss']
+    selector: 'expense-category',
+    templateUrl: './expense-category.component.html',
+    styleUrls: ['./expense-category.component.scss']
 })
-export class TransactionCategoryComponent {
+export class ExpenseCategoryComponent {
     private groupNames$: Observable<string[]>;
 
     currentCategory?: GroupedCategories;
@@ -21,12 +21,12 @@ export class TransactionCategoryComponent {
     });
 
     constructor(
-        private readonly transactionService: TransactionService,
+        private readonly expenseService: ExpenseService,
         private readonly fb: FormBuilder,
         private readonly modalInstance: NgbActiveModal,
         private readonly toastService: ToastService
     ) {
-        this.groupNames$ = this.transactionService.groupedCategories$
+        this.groupNames$ = this.expenseService.groupedCategories$
             .pipe(
                 map(data => data.map(g => g.name))
             )
@@ -49,7 +49,7 @@ export class TransactionCategoryComponent {
             return;
         }
 
-        this.transactionService.saveCategory(this.form.value.categoryName, this.form.value.groupName)
+        this.expenseService.saveCategory(this.form.value.categoryName, this.form.value.groupName)
             .subscribe(() => {
                 this.toastService.showSuccess("Your category was successfully saved.");
                 this.modalInstance.close();
