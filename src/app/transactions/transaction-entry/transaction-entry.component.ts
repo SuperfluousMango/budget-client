@@ -61,7 +61,7 @@ export class TransactionEntryComponent implements OnDestroy {
 
     formatter = (cat: TransactionCategory) => cat.displayName;
 
-    saveTransaction() {
+    saveTransaction(): void {
         if (this.form.invalid) {
             return;
         }
@@ -80,15 +80,15 @@ export class TransactionEntryComponent implements OnDestroy {
             });
     }
 
-    cancelDialog() {
+    cancelDialog(): void {
         this.modalInstance.dismiss();
     }
 
-    openCategoryModal() {
+    openCategoryModal(): void {
         this.modalService.open(TransactionCategoryComponent);
     }
 
-    private initializeForm() {
+    private initializeForm(): void {
         this.form.reset();
         this.dateField?.nativeElement.focus();
     }
