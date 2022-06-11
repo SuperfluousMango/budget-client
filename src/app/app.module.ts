@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { RecentTransactionsComponent } from './dashboard/recent-transactions/recent-transactions.component';
 import { RecentGroupedTransactionsComponent } from './dashboard/recent-grouped-transactions/recent-grouped-transactions.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ChartLegendComponent } from './dashboard/recent-grouped-transactions/chart-legend/chart-legend.component';
 
 @NgModule({
     imports: [
@@ -31,11 +32,13 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
         TransactionEntryComponent,
         TransactionCategoryComponent,
         RecentTransactionsComponent,
-        RecentGroupedTransactionsComponent
+        RecentGroupedTransactionsComponent,
+        ChartLegendComponent
     ],
     providers: [
         { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter },
         { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
+        CurrencyPipe
     ],
     bootstrap: [AppComponent]
 })

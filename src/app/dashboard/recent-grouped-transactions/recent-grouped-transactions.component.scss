@@ -4,8 +4,10 @@
     gap: 1rem;
 }
 
-.group-list {
-    margin-top: 1rem;
-    font-size: 1.125rem;
-    max-height: calc(300px - 2rem);
+.tooltip-header {
+    font-size: 0.875rem;
+}
+
+.tooltip-value {
+    font-size: 1rem;
 }
