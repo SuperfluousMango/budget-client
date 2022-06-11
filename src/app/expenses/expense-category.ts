@@ -1,9 +1,9 @@
 export interface GroupedCategories {
     name: string;
-    categories: TransactionCategory[];
+    categories: ExpenseCategory[];
 }
 
-export interface TransactionCategory {
+export interface ExpenseCategory {
     id: number;
     name: string;
     displayName: string;

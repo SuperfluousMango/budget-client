@@ -9,13 +9,13 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let t of recentTransactions">
-                <td>{{ t.transactionDate | date }}</td>
-                <td>{{ t.amount | currency }}</td>
-                <td>{{ t.memo }}</td>
+            <tr *ngFor="let e of recentExpenses">
+                <td>{{ e.transactionDate | date }}</td>
+                <td>{{ e.amount | currency }}</td>
+                <td>{{ e.memo }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a class="btn btn-primary" routerLink="TransactionList">View more</a>
+    <a class="btn btn-primary" routerLink="ExpenseList">View more</a>
 </ng-template>

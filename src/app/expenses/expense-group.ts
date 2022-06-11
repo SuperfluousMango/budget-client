@@ -1,4 +1,4 @@
-export interface TransactionGroup {
+export interface ExpenseGroup {
     name: string;
     total: number
 }

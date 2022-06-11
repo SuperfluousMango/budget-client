@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <header>Add a new transaction</header>
+    <header>Enter a new expense</header>
     <button type="button" class="btn-close" aria-label="Close" (click)="cancelDialog()"></button>
 </div>
 <div class="modal-body" [formGroup]="form">
@@ -30,18 +30,18 @@
 
     <div>
         <label class="form-label" for="memo">Memo</label>
-        <input type="text" id="memo" class="form-control" formControlName="memo" (keypress.enter)="saveTransaction()">
+        <input type="text" id="memo" class="form-control" formControlName="memo" (keypress.enter)="saveExpense()">
     </div>
 
     <div class="form-check mt-2">
         <input type="checkbox" class="form-check-input" [formControl]="keepDialogOpenOnSave" id="keepDialogOpenOnSave">
         <label class="form-check-label" for="keepDialogOpenOnSave">
-            Enter another transaction
+            Enter another expense
         </label>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn-primary" (click)="saveTransaction()" [disabled]="this.form.invalid">Save Transaction</button>
+    <button type="button" class="btn-primary" (click)="saveExpense()" [disabled]="this.form.invalid">Save Expense</button>
     <button type="button" class="btn-secondary" (click)="cancelDialog()">Cancel</button>
 </div>
 
