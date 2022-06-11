@@ -44,7 +44,7 @@ export class TransactionCategoryComponent {
             ))
         );
 
-    saveCategory() {
+    saveCategory(): void {
         if (this.form.invalid) {
             return;
         }
@@ -56,7 +56,7 @@ export class TransactionCategoryComponent {
             });
     }
 
-    cancelDialog() {
+    cancelDialog(): void {
         this.modalInstance.dismiss();
     }
 }

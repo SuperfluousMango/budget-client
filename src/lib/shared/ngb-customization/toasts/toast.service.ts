@@ -32,31 +32,31 @@ export class ToastService {
 
     toasts: any[] = [];
 
-    showSuccess(message: string) {
+    showSuccess(message: string): void {
         this.show(message, this.SUCCESS_CONFIG);
     }
 
-    showError(message: string) {
+    showError(message: string): void {
         this.show(message, this.ERROR_CONFIG);
     }
 
-    showWarning(message: string) {
+    showWarning(message: string): void {
         this.show(message, this.WARNING_CONFIG);
     }
 
-    showInfo(message: string) {
+    showInfo(message: string): void {
         this.show(message, this.INFO_CONFIG);
     }
 
-    show(message: string, options: any = {}) {
+    show(message: string, options: any = {}): void {
         this.toasts.push({ message, ...options });
     }
 
-    remove(toast: any) {
+    remove(toast: any): void {
         this.toasts = this.toasts.filter(t => t !== toast);
     }
 
-    clear() {
+    clear(): void {
         this.toasts.splice(0, this.toasts.length);
     }
 }
