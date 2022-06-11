@@ -1,0 +1,13 @@
+<header class="total-spending">Total Spending: {{ total | currency }}</header>
+<div class="contents">
+    <ng-container *ngFor="let item of items; index as i" [ngTemplateOutlet]="itemRow"
+                  [ngTemplateOutletContext]="{ $implicit: item, index: i }">
+    </ng-container>
+</div>
+
+<ng-template #itemRow let-item let-index="index">
+    <div class="item-row" (mouseenter)="hover(index)" (mouseleave)="hover()">
+        <div class="color-swatch" [style.backgroundColor]="item.color"></div>
+        <div class="row-label">{{ item.text }}</div>
+    </div>
+</ng-template>
