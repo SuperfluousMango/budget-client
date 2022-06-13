@@ -17,5 +17,8 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" routerLink="ExpenseList">View more</a>
+    <div class="button-row">
+        <button type="button" class="btn btn-success" (click)="createExpense()">Add a new expense</button>
+        <a class="btn btn-primary" routerLink="ExpenseList">View more</a>
+    </div>
 </ng-template>
