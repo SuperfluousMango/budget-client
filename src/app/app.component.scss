@@ -13,5 +13,12 @@
         line-height: 1.625rem;
         font-weight: 600;
         font-variant: small-caps;
+        display: flex;
+        align-items: center;
+
+        i.bi {
+            transform: skewX(-10deg);
+            padding: 4px 8px 0 4px;
+        }
     }
 }

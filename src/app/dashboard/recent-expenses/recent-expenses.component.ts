@@ -31,6 +31,11 @@ export class RecentExpensesComponent {
             });
     }
 
+    createExpense(): void {
+        const modalInstance = this.modalService.open(ExpenseEntryComponent);
+        modalInstance.closed.subscribe(() => this.updateRecentExpenses());
+    }
+
     private updateRecentExpenses() {
         this.expenseService.getRecentExpenses()
             .subscribe(data => {
