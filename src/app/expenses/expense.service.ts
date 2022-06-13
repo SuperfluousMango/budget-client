@@ -31,17 +31,20 @@ export class ExpenseService implements OnDestroy {
         this._destroy$.complete();
     }
 
+    getExpense(id: number): Observable<Expense> {
+        const url = `${environment.apiUrl}/api/Expense/${id}`;
+        return this.httpClient.get<Expense>(url);
+    }
+
     getExpensesByMonth(year: number, month: number): Observable<Expense[]> {
         const url = `${environment.apiUrl}/api/Expense/${year}/${month}`;
         return this.httpClient.get<Expense[]>(url);
     }
 
     saveExpense(expense: Expense): Observable<void> {
-        const url = `${environment.apiUrl}/api/Expense`;
-        return this.httpClient.post<void>(url, expense)
-            .pipe(
-                tap(() => this._expenseListUpdateSubj.next(expense.transactionDate))
-            );
+        return expense.id
+            ? this.updateExpense(expense)
+            : this.createExpense(expense);
     }
 
     saveCategory(categoryName: string, groupName: string): Observable<void> {
@@ -66,5 +69,21 @@ export class ExpenseService implements OnDestroy {
         const url = `${environment.apiUrl}/api/ExpenseCategory`;
         this.httpClient.get<GroupedCategories[]>(url)
             .subscribe(data => this._categorySubj$.next(data));
+    }
+
+    private createExpense(expense: Expense): Observable<void> {
+        const url = `${environment.apiUrl}/api/Expense`;
+        return this.httpClient.post<void>(url, expense)
+            .pipe(
+                tap(() => this._expenseListUpdateSubj.next(expense.transactionDate))
+            );
+    }
+
+    private updateExpense(expense: Expense): Observable<void> {
+        const url = `${environment.apiUrl}/api/Expense/${expense.id}`;
+        return this.httpClient.put<void>(url, expense)
+            .pipe(
+                tap(() => this._expenseListUpdateSubj.next(expense.transactionDate))
+            );
     }
 }

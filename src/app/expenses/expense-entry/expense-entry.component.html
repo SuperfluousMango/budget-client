@@ -2,7 +2,7 @@
     <header>Enter a new expense</header>
     <button type="button" class="btn-close" aria-label="Close" (click)="cancelDialog()"></button>
 </div>
-<div class="modal-body" [formGroup]="form">
+<div class="modal-body" [ngClass]="{ 'edit-mode': editMode }" [formGroup]="form">
     <div>
         <label class="form-label" for="transactionDate">Transaction Date</label>
         <div class="input-group">
@@ -10,30 +10,42 @@
                    ngbDatepicker [maxDate]="maxDate" ngbAutofocus #dateField #d="ngbDatepicker">
             <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.open()"></button>
         </div>
+        <div class="expense-info">
+            {{ expense?.transactionDate | date }}
+        </div>
     </div>
     
     <div>
         <label class="form-label" for="amount">Amount</label>
         <input type="number" id="amount" class="form-control" min="0.01" step="0.01" id="amount" formControlName="amount">
+        <div class="expense-info">
+            {{ expense?.amount | currency }}
+        </div>
     </div>
 
     <div>
         <label class="form-label" for="categoryId">Category</label>
         <div class="input-group">
-            <input id="categoryId" class="form-control" formControlName="category" [ngbTypeahead]="searchCategories"
+            <input id="categoryId" class="form-control" formControlName="category" (focus)="showCategoryDropdown($event)" [ngbTypeahead]="searchCategories"
                 [editable]="false" [inputFormatter]="formatter" [resultFormatter]="formatter" [resultTemplate]="rt">
             <button type="button" class="btn btn-outline-secondary" (click)="openCategoryModal()">
                 <i class="bi bi-plus"></i>
             </button>
+        </div>
+        <div class="expense-info">
+            {{ expenseCategoryText }}
         </div>
     </div>
 
     <div>
         <label class="form-label" for="memo">Memo</label>
         <input type="text" id="memo" class="form-control" formControlName="memo" (keypress.enter)="saveExpense()">
+        <div class="expense-info">
+            {{ expense?.memo || '(no memo)' }}
+        </div>
     </div>
 
-    <div class="form-check mt-2">
+    <div *ngIf="allowAdditionalExpenses && editMode" class="form-check mt-2">
         <input type="checkbox" class="form-check-input" [formControl]="keepDialogOpenOnSave" id="keepDialogOpenOnSave">
         <label class="form-check-label" for="keepDialogOpenOnSave">
             Enter another expense
@@ -41,8 +53,14 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn-primary" (click)="saveExpense()" [disabled]="this.form.invalid">Save Expense</button>
-    <button type="button" class="btn-secondary" (click)="cancelDialog()">Cancel</button>
+    <ng-container *ngIf="editMode; else viewModeButtons">
+        <button type="button" class="btn-primary" (click)="saveExpense()" [disabled]="this.form.invalid">Save Expense</button>
+        <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+    </ng-container>
+    <ng-template #viewModeButtons>
+        <button type="button" class="btn-primary" (click)="cancelDialog()">Close</button>
+        <button type="button" class="btn-secondary" (click)="beginEditMode()">Edit Expense</button>
+    </ng-template>
 </div>
 
 <ng-template #rt let-r="result">

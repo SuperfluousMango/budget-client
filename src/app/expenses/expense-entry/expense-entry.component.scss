@@ -1,3 +1,25 @@
+.modal-body {
+    .expense-info {
+        display: none;
+    }
+
+    &:not(.edit-mode) {
+        .form-label {
+            margin-bottom: 0.25rem;
+        }
+
+        label + input, label + .input-group {
+            display: none;
+        }
+
+        .expense-info {
+            display: block;
+            height: 2.625rem;
+            font-size: 1.25rem;
+        }
+    }
+}
+
 .modal-footer {
     flex-direction: row-reverse;
     justify-content: flex-start;
