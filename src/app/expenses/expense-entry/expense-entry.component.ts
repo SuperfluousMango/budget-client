@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastService } from '@shared';
+import { ConfirmDialogService, ToastService } from '@shared';
 import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, Subject, takeUntil } from 'rxjs';
 import { Expense } from '../expense';
 import { ExpenseCategory } from '../expense-category';
@@ -46,7 +46,8 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
         private readonly fb: FormBuilder,
         private readonly modalInstance: NgbActiveModal,
         private readonly modalService: NgbModal,
-        private readonly toastService: ToastService
+        private readonly toastService: ToastService,
+        private readonly confirmDialogService: ConfirmDialogService
     ) {
         this.expenseService.categories$
             .pipe(takeUntil(this._destroy$))
@@ -134,6 +135,25 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
 
     openCategoryModal(): void {
         this.modalService.open(ExpenseCategoryComponent);
+    }
+
+    deleteExpense(): void {
+        if (!this.expense) {
+            return;
+        }
+
+        const title = 'Delete Expense',
+            message = `You are about to delete an expense in the amount of $${this.expense?.amount} for ${this.expenseCategoryText}. Are you sure?`,
+            confirmButtonText = `Yes, I'm sure`,
+            cancelButtonText = `No, I'd like to go back`;
+
+        this.confirmDialogService.createConfirmDialog(message, title, confirmButtonText, cancelButtonText)
+            .subscribe(result => {
+                if (result) {
+                    this.expenseService.deleteExpense(this.expense!)
+                        .subscribe(() => this.closeDialog());
+                }
+            });
     }
 
     private initializeForm(): void {

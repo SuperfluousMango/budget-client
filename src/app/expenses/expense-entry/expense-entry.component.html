@@ -54,12 +54,13 @@
 </div>
 <div class="modal-footer">
     <ng-container *ngIf="editMode; else viewModeButtons">
-        <button type="button" class="btn-primary" (click)="saveExpense()" [disabled]="this.form.invalid">Save Expense</button>
-        <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="saveExpense()" [disabled]="this.form.invalid">Save Expense</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
     </ng-container>
     <ng-template #viewModeButtons>
-        <button type="button" class="btn-primary" (click)="cancelDialog()">Close</button>
-        <button type="button" class="btn-secondary" (click)="beginEditMode()">Edit Expense</button>
+        <button type="button" class="btn btn-primary" (click)="cancelDialog()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="beginEditMode()">Edit Expense</button>
+        <button type="button" class="btn btn-danger" (click)="deleteExpense()">Delete</button>
     </ng-template>
 </div>
 

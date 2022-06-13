@@ -47,6 +47,14 @@ export class ExpenseService implements OnDestroy {
             : this.createExpense(expense);
     }
 
+    deleteExpense(expense: Expense): Observable<void> {
+        const url = `${environment.apiUrl}/api/Expense/${expense.id}`;
+        return this.httpClient.delete<void>(url)
+            .pipe(
+                tap(() => this._expenseListUpdateSubj.next(expense.transactionDate))
+            );
+    }
+
     saveCategory(categoryName: string, groupName: string): Observable<void> {
         const url = `${environment.apiUrl}/api/ExpenseCategory`;
         return this.httpClient.post<void>(url, { categoryName, groupName })
