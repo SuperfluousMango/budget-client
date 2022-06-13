@@ -36,7 +36,7 @@ export class ExpenseListComponent implements OnDestroy {
 
         this.expenseService.expenseListUpdate$
             .pipe(takeUntil(this._destroy$))
-            .subscribe(transDate => this.checkForRefresh(transDate));
+            .subscribe(expenseDate => this.checkForRefresh(expenseDate));
     }
 
     ngOnDestroy(): void {
@@ -46,6 +46,14 @@ export class ExpenseListComponent implements OnDestroy {
 
     openModal(): void {
         this.modalService.open(ExpenseEntryComponent);
+    }
+
+    viewExpense(expense: Expense): void {
+        const modalInstance = this.modalService.open(ExpenseEntryComponent),
+            comp = (modalInstance.componentInstance as ExpenseEntryComponent);
+        comp.editMode = false;
+        comp.expense = expense;
+        comp.ngOnInit();
     }
 
     private checkForRefresh(transDate: Date): void {

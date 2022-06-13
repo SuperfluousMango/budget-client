@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ExpenseService } from '@expenses';
-import { first } from 'rxjs';
+import { first, Subject, takeUntil } from 'rxjs';
 
 type ExpenseGroupSummary = { name: string, value: number };
 
@@ -9,7 +9,7 @@ type ExpenseGroupSummary = { name: string, value: number };
     templateUrl: './recent-grouped-expenses.component.html',
     styleUrls: ['./recent-grouped-expenses.component.scss'],
 })
-export class RecentGroupedExpensesComponent {
+export class RecentGroupedExpensesComponent implements OnDestroy {
     loading = true;
     expenseGroups: ExpenseGroupSummary[] = [];
     activeEntries: ExpenseGroupSummary[] = [];
@@ -17,20 +17,21 @@ export class RecentGroupedExpensesComponent {
 
     colorSchemeName: string;
 
-    constructor(expenseService: ExpenseService) {
+    private destroy$ = new Subject<void>();
+
+    constructor(private readonly expenseService: ExpenseService) {
         this.colorSchemeName = 'vivid';
 
-        const date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth() + 1;
-        
-        expenseService.getRecentGroupedExpenses(year, month)
-            .pipe(first())
-            .subscribe(data => {
-                this.expenseGroups = data.map(x => ({ name: x.name, value: x.total }));
-                this.legendData = this.expenseGroups.map(x => `${x.name}: ${x.value}`);
-                this.loading = false;
-            });
+        this.getGroupedExpenses();
+
+        this.expenseService.expenseListUpdate$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.getGroupedExpenses());
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     itemHover(event?: ExpenseGroupSummary | number | undefined): void {
@@ -42,5 +43,19 @@ export class RecentGroupedExpensesComponent {
         const eventAsNumber = Number(event),
             eventAsItem: ExpenseGroupSummary = event as ExpenseGroupSummary;
         this.activeEntries = [ isNaN(eventAsNumber) ? eventAsItem : this.expenseGroups[eventAsNumber] ];
+    }
+
+    private getGroupedExpenses() {
+        const date = new Date(),
+            year = date.getFullYear(),
+            month = date.getMonth() + 1;
+        
+        this.expenseService.getRecentGroupedExpenses(year, month)
+            .pipe(first())
+            .subscribe(data => {
+                this.expenseGroups = data.map(x => ({ name: x.name, value: x.total }));
+                this.legendData = this.expenseGroups.map(x => `${x.name}: ${x.value}`);
+                this.loading = false;
+            });
     }
 }
