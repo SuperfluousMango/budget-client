@@ -3,16 +3,17 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { map, Observable, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Expense } from './expense';
-import { GroupedCategories } from './expense-category';
-import { ExpenseGroup } from './expense-group';
+import { ExpenseCategoryGroup } from './expense-category';
+import { ExpensesByGroup } from './expenses-by-group';
 import { ExpenseInfo } from './expense-info';
+import { ExpensesByCategory } from './expenses-by-category';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ExpenseService implements OnDestroy {
     private _expenseListUpdateSubj = new Subject<Date>();
-    private _categorySubj$ = new ReplaySubject<GroupedCategories[]>(1);
+    private _categorySubj$ = new ReplaySubject<ExpenseCategoryGroup[]>(1);
     private _destroy$ = new ReplaySubject<void>(1);
 
     expenseListUpdate$ = this._expenseListUpdateSubj.asObservable();
@@ -68,14 +69,19 @@ export class ExpenseService implements OnDestroy {
         return this.httpClient.get<ExpenseInfo[]>(url);
     }
 
-    getRecentGroupedExpenses(year: number, month: number): Observable<ExpenseGroup[]> {
-        const url = `${environment.apiUrl}/api/Expense/RecentGrouped/${year}/${month}`;
-        return this.httpClient.get<ExpenseGroup[]>(url);
+    getRecentExpensesByGroup(year: number, month: number): Observable<ExpensesByGroup[]> {
+        const url = `${environment.apiUrl}/api/Expense/RecentByGroup/${year}/${month}`;
+        return this.httpClient.get<ExpensesByGroup[]>(url);
+    }
+
+    getRecentExpensesByCategory(year: number, month: number, categoryGroupId: number): Observable<ExpensesByCategory[]> {
+        const url = `${environment.apiUrl}/api/Expense/RecentByCategory/${year}/${month}/${categoryGroupId}`;
+        return this.httpClient.get<ExpensesByGroup[]>(url);
     }
 
     private loadCategories(): void {
         const url = `${environment.apiUrl}/api/ExpenseCategory`;
-        this.httpClient.get<GroupedCategories[]>(url)
+        this.httpClient.get<ExpenseCategoryGroup[]>(url)
             .subscribe(data => this._categorySubj$.next(data));
     }
 

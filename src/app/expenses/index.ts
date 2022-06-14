@@ -5,3 +5,5 @@ export * from './expense-category/expense-category.component';
 export * from './expense-entry/expense-entry.component';
 export * from './expense-info';
 export * from './expense-list/expense-list.component';
+export * from './expenses-by-group';
+export * from './expenses-by-category';

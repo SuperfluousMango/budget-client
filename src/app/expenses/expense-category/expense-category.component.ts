@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@shared';
 import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, switchMap } from 'rxjs';
-import { GroupedCategories } from '../expense-category';
+import { ExpenseCategoryGroup } from '../expense-category';
 import { ExpenseService } from '../expense.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { ExpenseService } from '../expense.service';
 export class ExpenseCategoryComponent {
     private groupNames$: Observable<string[]>;
 
-    currentCategory?: GroupedCategories;
+    currentCategory?: ExpenseCategoryGroup;
     form = this.fb.group({
         groupName: this.fb.control(null, [Validators.required, Validators.maxLength(100)]),
         categoryName: this.fb.control(null, [Validators.required, Validators.maxLength(100)])

@@ -12,6 +12,7 @@ export class ChartLegendComponent implements OnChanges {
     @Input() colorScheme: string = "";
     @Input() data: { name: string, value: number }[] = [];
     @Output() itemHover = new EventEmitter<number | undefined>();
+    @Output() itemSelect = new EventEmitter<string>();
 
     public total?: number;
     public items: { text: string, color: string }[] = [];
@@ -28,6 +29,11 @@ export class ChartLegendComponent implements OnChanges {
 
     hover(index?: number) {
         this.itemHover.emit(index);
+    }
+
+    select(text: string) {
+        const itemName = text.split(':')[0];
+        this.itemSelect.emit(itemName);
     }
 
     private updateTotal(): void {

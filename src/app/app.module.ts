@@ -3,16 +3,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { DashboardComponent } from '@dashboard';
+import { ChartLegendComponent, DashboardComponent, RecentExpensesByCategoryComponent, RecentExpensesByGroupComponent } from '@dashboard';
 import { NgbDateAdapter, NgbDateNativeAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateParserFormatter, SharedModule } from '@shared';
 import { ExpenseCategoryComponent, ExpenseEntryComponent, ExpenseListComponent } from '@expenses';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RecentExpensesComponent } from './dashboard/recent-expenses/recent-expenses.component';
-import { RecentGroupedExpensesComponent } from './dashboard/recent-grouped-expenses/recent-grouped-expenses.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ChartLegendComponent } from './dashboard/recent-grouped-expenses/chart-legend/chart-legend.component';
 
 @NgModule({
     imports: [
@@ -32,8 +30,9 @@ import { ChartLegendComponent } from './dashboard/recent-grouped-expenses/chart-
         ExpenseEntryComponent,
         ExpenseCategoryComponent,
         RecentExpensesComponent,
-        RecentGroupedExpensesComponent,
-        ChartLegendComponent
+        RecentExpensesByGroupComponent,
+        ChartLegendComponent,
+        RecentExpensesByCategoryComponent
     ],
     providers: [
         { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter },
