@@ -26,8 +26,8 @@
     <div>
         <label class="form-label" for="categoryId">Category</label>
         <div class="input-group">
-            <input id="categoryId" class="form-control" formControlName="category" (focus)="showCategoryDropdown($event)" [ngbTypeahead]="searchCategories"
-                [editable]="false" [inputFormatter]="formatter" [resultFormatter]="formatter" [resultTemplate]="rt">
+            <input id="categoryId" class="form-control" formControlName="category" (focus)="focus$.next($any($event).target.value)"
+                [ngbTypeahead]="searchCategories" [editable]="false" [inputFormatter]="formatter" [resultFormatter]="formatter" [resultTemplate]="rt">
             <button type="button" class="btn btn-outline-secondary" (click)="openCategoryModal()">
                 <i class="bi bi-plus"></i>
             </button>

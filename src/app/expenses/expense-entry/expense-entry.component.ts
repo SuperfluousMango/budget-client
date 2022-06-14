@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@ang
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDialogService, ToastService } from '@shared';
-import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, merge, Observable, OperatorFunction, Subject, takeUntil } from 'rxjs';
 import { Expense } from '../expense';
 import { ExpenseCategory } from '../expense-category';
 import { ExpenseCategoryComponent } from '../expense-category/expense-category.component';
@@ -17,7 +17,6 @@ const HYPHEN = '-';
     styleUrls: ['./expense-entry.component.scss']
 })
 export class ExpenseEntryComponent implements OnInit, OnDestroy {
-
     @Input() editMode = true;
     @Input() expense?: Expense;
 
@@ -25,6 +24,7 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
 
     allowAdditionalExpenses = true;
     expenseCategoryText?: string;
+    focus$ = new Subject<string>();
     
     private readonly _destroy$ = new Subject<void>();
     
@@ -72,22 +72,21 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
         this._destroy$.complete();
     }
 
-    showCategoryDropdown(event: FocusEvent) {
-        event.stopPropagation();
-        const inputEvent = new InputEvent('input', { data: (event.target as HTMLInputElement).value });
-        event.target?.dispatchEvent(inputEvent);
-    }
-
-    searchCategories: OperatorFunction<string, readonly ExpenseCategory[]> = (text$: Observable<string>) =>
-        text$.pipe(
+    searchCategories: OperatorFunction<string, readonly ExpenseCategory[]> = (text$: Observable<string>) => {
+        const debouncedText$ = text$.pipe(
             debounceTime(200),
-            distinctUntilChanged(),
-            map(term => term.toLocaleLowerCase()),
-            map(term => term.replace(EN_DASH, HYPHEN)),
-            map(term => this.categories.filter(cat => cat.displayName.toLocaleLowerCase().replace(EN_DASH, HYPHEN).includes(term))
-                .slice(0, 10)
-            )
+            distinctUntilChanged()
         );
+
+        return merge(debouncedText$, this.focus$.asObservable())
+            .pipe(
+                map(term => term.toLocaleLowerCase()),
+                map(term => term.replace(EN_DASH, HYPHEN)),
+                map(term => this.categories.filter(cat => cat.displayName.toLocaleLowerCase().replace(EN_DASH, HYPHEN).includes(term))
+                    .slice(0, 10)
+                )
+            );
+    }
 
     formatter = (cat: ExpenseCategory) => cat.displayName;
 
@@ -167,7 +166,10 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
             const category = this.categories.find(c => c.id === this.expense?.expenseCategoryId);
             this.form.controls['category'].setValue(category);
         }
-        this.dateField?.nativeElement.focus();
+
+        // Use setTimeout to delay the focus until after the change detection cycle. This helps
+        // when editing an existing transaction, since the edit fields won't be visible yet.
+        setTimeout(() => this.dateField?.nativeElement.focus(), 0);
     }
 
     private updateCategoryText() {
