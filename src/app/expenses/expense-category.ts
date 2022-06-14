@@ -1,4 +1,4 @@
-export interface GroupedCategories {
+export interface ExpenseCategoryGroup {
     name: string;
     categories: ExpenseCategory[];
 }

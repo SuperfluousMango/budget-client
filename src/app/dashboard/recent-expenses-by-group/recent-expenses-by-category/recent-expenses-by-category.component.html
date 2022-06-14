@@ -1,0 +1,21 @@
+<loader *ngIf="loading; else content"></loader>
+<ng-template #content>
+    <div *ngIf="drawing" class="drawing-overlay"></div>
+    <ngx-charts-pie-chart [view]="[300, 300]" [results]="expensesByCategory" [scheme]="colorSchemeName" [activeEntries]="activeEntries"
+                          [legend]="false" (activate)="itemHover($event)" (deactivate)="itemHover()">
+        <ng-template #tooltipTemplate let-model="model">
+            <div class="tooltip-header">{{ model.name }}</div>
+            <div class="tooltip-value">{{ model.value | currency }}</div>
+        </ng-template>
+    </ngx-charts-pie-chart>
+    <div>
+        <div class="category-group-name d-flex">
+            <span>{{ categoryGroupName }}</span>
+            <button type="button" class="btn btn-outline-primary ms-auto" (click)="goBack()">
+                <i class="bi bi-chevron-left"></i>
+                Back
+            </button>
+        </div>
+        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByCategory" (itemHover)="itemHover($event)"></chart-legend>
+    </div>
+</ng-template>
