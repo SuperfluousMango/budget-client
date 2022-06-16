@@ -165,6 +165,8 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
 
             const category = this.categories.find(c => c.id === this.expense?.expenseCategoryId);
             this.form.controls['category'].setValue(category);
+        } else {
+            this.form.controls['id'].setValue(0);
         }
 
         // Use setTimeout to delay the focus until after the change detection cycle. This helps
