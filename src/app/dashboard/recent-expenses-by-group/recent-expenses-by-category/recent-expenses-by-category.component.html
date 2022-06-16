@@ -16,6 +16,6 @@
                 Back
             </button>
         </div>
-        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByCategory" (itemHover)="itemHover($event)"></chart-legend>
+        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByCategory" [activeIndex]="activeIndex" (itemHover)="itemHover($event)"></chart-legend>
     </div>
 </ng-template>

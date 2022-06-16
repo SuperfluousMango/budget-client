@@ -9,7 +9,8 @@
                 <div class="tooltip-value">{{ model.value | currency }}</div>
             </ng-template>
         </ngx-charts-pie-chart>
-        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByGroup" (itemHover)="itemHover($event)" (itemSelect)="openDrilldown($event)"></chart-legend>
+        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByGroup" [activeIndex]="activeIndex"
+                      (itemHover)="itemHover($event)" (itemSelect)="openDrilldown($event)"></chart-legend>
     </ng-template>
 </ng-container>
 <ng-template #categoryDrilldown>

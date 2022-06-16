@@ -6,7 +6,7 @@
 </div>
 
 <ng-template #itemRow let-item let-index="index">
-    <div class="item-row" (mouseenter)="hover(index)" (mouseleave)="hover()" (click)="select(item.text)">
+    <div class="item-row" [ngClass]="{ active: activeIndex === index }" (mouseenter)="hover(index)" (mouseleave)="hover()" (click)="select(item.text)">
         <div class="color-swatch" [style.backgroundColor]="item.color"></div>
         <div class="row-label">{{ item.text }}</div>
     </div>
