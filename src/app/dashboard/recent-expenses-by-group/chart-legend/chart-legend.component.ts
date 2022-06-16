@@ -2,6 +2,8 @@ import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { colorSets } from '@swimlane/ngx-charts';
 
+type Item = { name: string, value: number };
+
 @Component({
     selector: 'chart-legend',
     templateUrl: './chart-legend.component.html',
@@ -10,7 +12,8 @@ import { colorSets } from '@swimlane/ngx-charts';
 })
 export class ChartLegendComponent implements OnChanges {
     @Input() colorScheme: string = "";
-    @Input() data: { name: string, value: number }[] = [];
+    @Input() data: Item[] = [];
+    @Input() activeIndex = -1;
     @Output() itemHover = new EventEmitter<number | undefined>();
     @Output() itemSelect = new EventEmitter<string>();
 

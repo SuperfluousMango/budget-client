@@ -18,6 +18,7 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
     drawing = false;
     expensesByCategory: ExpensesByCategorySummary[] = [];
     activeEntries: ExpensesByCategorySummary[] = [];
+    activeIndex = -1;
     legendData: string[] = [];
 
     colorSchemeName: string;
@@ -26,12 +27,12 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
 
     constructor(private readonly expenseService: ExpenseService) {
         this.colorSchemeName = 'vivid';
-        
+
         this.expenseService.expenseListUpdate$
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => this.getExpensesByCategory());
     }
-    
+
     ngOnInit() {
         this.getExpensesByCategory();
     }
@@ -45,20 +46,17 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
         this.exit.emit();
     }
 
-    itemHover(event?: ExpensesByCategorySummary | number | undefined): void {
+    itemHover(event?: any | number | undefined): void {
         if (event === undefined) {
             this.activeEntries = [];
             return;
         }
 
-        const eventAsNumber = Number(event),
-            eventAsItem: ExpensesByCategorySummary =
-                event as ExpensesByCategorySummary;
-        this.activeEntries = [
-            isNaN(eventAsNumber)
-                ? eventAsItem
-                : this.expensesByCategory[eventAsNumber],
-        ];
+        const eventAsNumber = Number(event);
+        this.activeEntries = [isNaN(eventAsNumber) ? event : this.expensesByCategory[eventAsNumber]];
+        this.activeIndex = isNaN(eventAsNumber)
+            ? this.expensesByCategory.findIndex(x => x.name === event.value.name)
+            : eventAsNumber;
     }
 
     private getExpensesByCategory() {

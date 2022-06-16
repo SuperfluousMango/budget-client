@@ -14,6 +14,7 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
     drawing = false;
     expensesByGroup: ExpensesByGroupSummary[] = [];
     activeEntries: ExpensesByGroupSummary[] = [];
+    activeIndex = -1;
     legendData: string[] = [];
 
     activeGroup: ExpensesByGroupSummary | null = null;
@@ -37,15 +38,18 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
         this.destroy$.complete();
     }
 
-    itemHover(event?: ExpensesByGroupSummary | number | undefined): void {
+    itemHover(event?: any | number | undefined): void {
         if (event === undefined) {
             this.activeEntries = [];
+            this.activeIndex = -1;
             return;
         }
 
-        const eventAsNumber = Number(event),
-            eventAsItem: ExpensesByGroupSummary = event as ExpensesByGroupSummary;
-        this.activeEntries = [ isNaN(eventAsNumber) ? eventAsItem : this.expensesByGroup[eventAsNumber] ];
+        const eventAsNumber = Number(event);
+        this.activeEntries = [isNaN(eventAsNumber) ? event : this.expensesByGroup[eventAsNumber]];
+        this.activeIndex = isNaN(eventAsNumber)
+            ? this.expensesByGroup.findIndex(x => x.name === event.value.name)
+            : eventAsNumber;
     }
 
     openDrilldown(groupName: string) {
@@ -61,7 +65,7 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
         const date = new Date(),
             year = date.getFullYear(),
             month = date.getMonth() + 1;
-        
+
         this.expenseService.getRecentExpensesByGroup(year, month)
             .pipe(first())
             .subscribe(data => {
