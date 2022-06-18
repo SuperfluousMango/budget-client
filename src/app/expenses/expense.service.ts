@@ -16,7 +16,8 @@ export class ExpenseService implements OnDestroy {
     private _categorySubj$ = new ReplaySubject<ExpenseCategoryGroup[]>(1);
     private _destroy$ = new ReplaySubject<void>(1);
 
-    expenseListUpdate$ = this._expenseListUpdateSubj.asObservable();
+    expenseListUpdate$ = this._expenseListUpdateSubj
+        .pipe(map(val => val instanceof Date ? val : new Date(val)));
     groupedCategories$ = this._categorySubj$.asObservable();
     categories$ = this._categorySubj$
         .pipe(
