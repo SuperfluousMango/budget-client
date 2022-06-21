@@ -82,9 +82,7 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
             .pipe(
                 map(term => term.toLocaleLowerCase()),
                 map(term => term.replace(EN_DASH, HYPHEN)),
-                map(term => this.categories.filter(cat => cat.displayName.toLocaleLowerCase().replace(EN_DASH, HYPHEN).includes(term))
-                    .slice(0, 10)
-                )
+                map(term => this.categories.filter(cat => cat.displayName.toLocaleLowerCase().replace(EN_DASH, HYPHEN).includes(term)))
             );
     }
 
@@ -133,7 +131,7 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
     }
 
     openCategoryModal(): void {
-        this.modalService.open(ExpenseCategoryComponent);
+        this.modalService.open(ExpenseCategoryComponent, { backdropClass: 'nested', windowClass: 'nested' });
     }
 
     deleteExpense(): void {

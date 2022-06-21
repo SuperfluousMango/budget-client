@@ -14,3 +14,23 @@ button {
         opacity: 0.5;
     }
 }
+
+/*
+ * ng-bootstrap overrides
+ */
+ngb-typeahead-window.dropdown-menu {
+    max-height: calc((32px * 7) + (8px * 2) + 2px); // 7 list items, plus 8px top/bottom padding, plus 1px top/bottom border
+    overflow-y: auto;
+    overflow-x: clip;
+}
+
+ngb-modal-backdrop.nested {
+    // 10 higher than the normal backdrop z-index
+    // !important because ng-bootstrap applies the z-index directly on the element, not through a class
+    z-index: 1065 !important;
+}
+
+ngb-modal-window.nested {
+    // 10 higher than the normal modal z-index
+    z-index: 1070;
+}
