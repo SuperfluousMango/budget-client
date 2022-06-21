@@ -7,7 +7,7 @@
         <div>
             <label class="form-label" for="group-name">Group</label>
             <input type="text" class="form-control" id="group-name" formControlName="groupName" ngbAutofocus
-                [ngbTypeahead]="searchGroupNames" [resultTemplate]="rt">
+                   (focus)="focus$.next($any($event).target.value)" [ngbTypeahead]="searchGroupNames" [resultTemplate]="rt">
         </div>
 
         <div>

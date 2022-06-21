@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@shared';
-import { debounceTime, distinctUntilChanged, map, Observable, OperatorFunction, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, merge, Observable, OperatorFunction, Subject, switchMap } from 'rxjs';
 import { ExpenseCategoryGroup } from '../expense-category';
 import { ExpenseService } from '../expense.service';
 
@@ -19,6 +19,7 @@ export class ExpenseCategoryComponent {
         groupName: this.fb.control(null, [Validators.required, Validators.maxLength(100)]),
         categoryName: this.fb.control(null, [Validators.required, Validators.maxLength(100)])
     });
+    focus$ = new Subject<string>();
 
     constructor(
         private readonly expenseService: ExpenseService,
@@ -32,17 +33,20 @@ export class ExpenseCategoryComponent {
             )
     }
 
-    searchGroupNames: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-        text$.pipe(
+    searchGroupNames: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
+        const debouncedText$ = text$.pipe(
             debounceTime(200),
-            distinctUntilChanged(),
-            map(term => term.toLocaleLowerCase()),
-            switchMap(term => this.groupNames$.pipe(
-                map(names => names.filter(name => name.toLocaleLowerCase().includes(term))
-                    .slice(0, 10)
-                )
-            ))
+            distinctUntilChanged()
         );
+
+        return merge(debouncedText$, this.focus$.asObservable())
+            .pipe(
+                map(term => term.toLocaleLowerCase()),
+                switchMap(term => this.groupNames$.pipe(
+                    map(names => names.filter(name => name.toLocaleLowerCase().includes(term)))
+                ))
+            );
+    }
 
     saveCategory(): void {
         if (this.form.invalid) {

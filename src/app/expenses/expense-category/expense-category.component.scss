@@ -1,3 +1,8 @@
+.modal-body {
+    // Increase height so the dropdown doesn't hang over the edge and look weird
+    min-height: 275px;
+}
+
 .modal-footer {
     flex-direction: row-reverse;
     justify-content: flex-start;
