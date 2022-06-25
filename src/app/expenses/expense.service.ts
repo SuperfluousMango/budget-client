@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { map, Observable, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
+import { first, map, Observable, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Expense } from './expense';
 import { ExpenseCategoryGroup } from './expense-category';
-import { ExpensesByGroup } from './expenses-by-group';
+import { ExpenseFilterService } from './expense-filter.service';
 import { ExpenseInfo } from './expense-info';
 import { ExpensesByCategory } from './expenses-by-category';
+import { ExpensesByGroup } from './expenses-by-group';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +25,10 @@ export class ExpenseService implements OnDestroy {
             map(data => data.map(group => group.categories).flat())
         );
 
-    constructor(private readonly httpClient: HttpClient) {
+    constructor(
+        private readonly expenseFilterService: ExpenseFilterService,
+        private readonly httpClient: HttpClient
+    ) {
         this.loadCategories();
     }
 
@@ -38,9 +42,18 @@ export class ExpenseService implements OnDestroy {
         return this.httpClient.get<Expense>(url);
     }
 
-    getExpensesByMonth(year: number, month: number): Observable<Expense[]> {
-        const url = `${environment.apiUrl}/api/Expense/${year}/${month}`;
-        return this.httpClient.get<Expense[]>(url);
+    getExpensesByMonth(): Observable<Expense[]> {
+        return this.expenseFilterService.filter$
+            .pipe(
+                first(),
+                switchMap(filter => {
+                    const categoryId = filter.categoryId ?? null,
+                        url = categoryId === null
+                            ? `${environment.apiUrl}/api/Expense/${filter.year}/${filter.month}`
+                            : `${environment.apiUrl}/api/Expense/${filter.year}/${filter.month}/${filter.categoryId}`;
+                    return this.httpClient.get<Expense[]>(url);
+                })
+            );
     }
 
     saveExpense(expense: Expense): Observable<void> {

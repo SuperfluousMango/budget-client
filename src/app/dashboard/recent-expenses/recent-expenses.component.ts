@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ExpenseEntryComponent, ExpenseInfo, ExpenseService } from '@expenses';
+import { Router } from '@angular/router';
+import { ExpenseEntryComponent, ExpenseFilterService, ExpenseInfo, ExpenseService } from '@expenses';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -13,6 +14,8 @@ export class RecentExpensesComponent {
 
     constructor(
         private readonly expenseService: ExpenseService,
+        private readonly expenseFilterService: ExpenseFilterService,
+        private readonly router: Router,
         private readonly modalService: NgbModal
     ) {
         this.updateRecentExpenses();
@@ -34,6 +37,11 @@ export class RecentExpensesComponent {
     createExpense(): void {
         const modalInstance = this.modalService.open(ExpenseEntryComponent);
         modalInstance.closed.subscribe(() => this.updateRecentExpenses());
+    }
+
+    viewExpenseList(): void {
+        this.expenseFilterService.updateFilter({});
+        this.router.navigate(['/ExpenseList']);
     }
 
     private updateRecentExpenses() {

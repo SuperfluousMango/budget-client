@@ -1,0 +1,37 @@
+:host {
+    position: relative;
+
+    button:focus-visible {
+        outline: 0;
+        background-color: rgba(151, 193, 254, 0.3);
+    }
+}
+
+.filter-dropdown-button {
+    display: flex;
+    align-items: baseline;
+    border: 0;
+    padding: 0.125rem 0.25rem;
+    background-color: transparent;
+    line-height: 1rem;
+    
+    .value {
+        margin-inline: 0.5rem 0.25rem;
+        font-weight: 600;
+    }
+
+    .bi {
+        font-size: 0.625rem;
+    }
+}
+
+.dropdown {
+    position: absolute;
+    background-color: white;
+    box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
+    max-height: calc(2rem * 7); // Display 7 entries at a time. If this is updated, also update the PAGE_SIZE constant.
+    width: fit-content;
+    z-index: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}

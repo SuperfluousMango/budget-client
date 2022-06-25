@@ -1,0 +1,10 @@
+<button type="button" class="filter-dropdown-button" #mainButton (click)="toggleOpen()">
+    {{ label }}
+    <span class="value">{{ ctrl.value ? ctrl.value[textProperty] : defaultText }}</span>
+    <i class="bi bi-caret-down-fill"></i>
+</button>
+
+<div *ngIf="isOpen" class="dropdown" #dropdown>
+    <button type="button" class="dropdown-item" (click)="selectValue(null, -1)">{{ defaultText }}</button>
+    <button *ngFor="let d of data; index as i" type="button" class="dropdown-item" (click)="selectValue(d, i)">{{ d[textProperty] }}</button>
+</div>
