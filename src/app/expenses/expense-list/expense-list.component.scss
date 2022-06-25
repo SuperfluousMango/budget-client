@@ -8,24 +8,38 @@ table {
     position: relative;
 }
 
-th {
-    position: sticky;
-    top: 0; /* Don't forget this, required for the stickiness */
-    background-color: var(--bs-white);
+thead {
+    th {
+        position: sticky;
+        top: 0; /* Don't forget this, required for the stickiness */
+        background-color: var(--bs-white);
+    }
+
+    th.date {
+        width: 125px;
+    }
+
+    th.amount {
+        width: 125px;
+    }
+
+    th.category {
+        width: 250px;
+    }
+
+    th button.filter-button {
+        display: inline-block;
+        margin-inline-start: auto;
+        border: 0;
+        background-color: transparent;
+    }
+
+    tr.filter-row th {
+        border-bottom: 1px solid black;
+        background-color: transparent;
+    }
 }
 
-th.date {
-    width: 125px;
-}
-
-th.amount {
-    width: 125px;
-}
-
-th.category {
-    width: 250px;
-}
-
-tr {
+tbody tr {
     cursor: pointer;
 }

@@ -3,6 +3,10 @@
 </h1>
 <button type="button" class="btn btn-sm btn-primary mb-1" (click)="openModal()">Add new expense</button>
 
+<div class="mt-2">
+    <filter-dropdown label="Category:" [formControl]="categoryFilterCtrl" [data]="categories" textProperty="displayName"></filter-dropdown>
+</div>
+
 <div class="table-wrapper">
     <loader *ngIf="loading; else content"></loader>
     <ng-template #content>
@@ -12,17 +16,23 @@
                     <th class="date">Date</th>
                     <th class="amount">Amount</th>
                     <th class="category">Category</th>
-                    <th>Memo</th>
+                    <th>
+                        Memo
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let e of expenses" (click)="viewExpense(e)">
                     <td>{{ e.transactionDate | date : 'M/d/y' }}</td>
                     <td>{{ e.amount | currency }}</td>
-                    <td>{{ categories[e.expenseCategoryId] }}</td>
+                    <td>{{ categoryHash[e.expenseCategoryId] }}</td>
                     <td>{{ e.memo }}</td>
                 </tr>
             </tbody>
         </table>
     </ng-template>
 </div>
+
+<ng-template #rt let-r="result">
+    {{ r.displayName }}
+</ng-template>

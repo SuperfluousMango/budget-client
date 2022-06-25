@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { ExpenseFilterService, ExpensesByCategory, ExpenseService } from '@expenses';
 import { first, Subject, takeUntil } from 'rxjs';
-import { ExpenseService } from '@expenses';
 
 type ExpensesByCategorySummary = { name: string; value: number };
 
@@ -23,9 +24,14 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
 
     colorSchemeName: string;
 
+    private categoryData: ExpensesByCategory[] = [];
     private destroy$ = new Subject<void>();
 
-    constructor(private readonly expenseService: ExpenseService) {
+    constructor(
+        private readonly expenseService: ExpenseService,
+        private readonly expenseFilterService: ExpenseFilterService,
+        private readonly router: Router
+    ) {
         this.colorSchemeName = 'vivid';
 
         this.expenseService.expenseListUpdate$
@@ -59,6 +65,12 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
             : eventAsNumber;
     }
 
+    openExpensesByCategory(event: string) {
+        const categoryId = this.categoryData.find(x => x.name === event)?.id ?? null;
+        this.expenseFilterService.updateFilter({ categoryId });
+        this.router.navigate(['/ExpenseList']);
+    }
+
     private getExpensesByCategory() {
         const date = new Date(),
             year = date.getFullYear(),
@@ -68,9 +80,10 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
             .getRecentExpensesByCategory(year, month, this.categoryId)
             .pipe(first())
             .subscribe((data) => {
+                this.categoryData = data;
                 this.expensesByCategory = data.map((x) => ({
                     name: x.name,
-                    value: x.total,
+                    value: x.total
                 }));
                 this.legendData = this.expensesByCategory.map(
                     (x) => `${x.name}: ${x.value}`

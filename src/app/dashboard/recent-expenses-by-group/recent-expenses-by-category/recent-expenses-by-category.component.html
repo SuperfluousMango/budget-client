@@ -2,7 +2,7 @@
 <ng-template #content>
     <div *ngIf="drawing" class="drawing-overlay"></div>
     <ngx-charts-pie-chart [view]="[300, 300]" [results]="expensesByCategory" [scheme]="colorSchemeName" [activeEntries]="activeEntries"
-                          [legend]="false" (activate)="itemHover($event)" (deactivate)="itemHover()">
+                          [legend]="false" (activate)="itemHover($event)" (deactivate)="itemHover()" (select)="openExpensesByCategory($event.name)">
         <ng-template #tooltipTemplate let-model="model">
             <div class="tooltip-header">{{ model.name }}</div>
             <div class="tooltip-value">{{ model.value | currency }}</div>
@@ -16,6 +16,8 @@
                 Back
             </button>
         </div>
-        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByCategory" [activeIndex]="activeIndex" (itemHover)="itemHover($event)"></chart-legend>
+        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByCategory" [activeIndex]="activeIndex"
+                      (itemHover)="itemHover($event)" (itemSelect)="openExpensesByCategory($event)">
+        </chart-legend>
     </div>
 </ng-template>
