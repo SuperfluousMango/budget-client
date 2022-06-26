@@ -23,9 +23,12 @@
       "dom"
     ],
     "paths": {
-        "@dashboard": [ "./src/app/dashboard/" ],
-        "@shared": [ "./src/lib/shared/" ],
-        "@expenses": [ "./src/app/expenses/" ]
+      "@lib-expenses": [ "projects/expenses/src/lib/" ],
+      "@lib-expenses/*": [ "projects/expenses/src/lib/*" ],
+      "@lib-ngb-customization": [ "projects/ngb-customization/src/lib/" ],
+      "@lib-ngb-customization/*": [ "projects/ngb-customization/src/lib/*" ],
+      "@lib-shared-components": [ "projects/shared-components/src/lib/" ],
+      "@lib-shared-components/*": [ "projects/shared-components/src/lib/*" ]
     }
   },
   "angularCompilerOptions": {
