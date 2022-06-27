@@ -3,8 +3,9 @@
 </h1>
 <button type="button" class="btn btn-sm btn-primary mb-1" (click)="openModal()">Add new expense</button>
 
-<div class="mt-2">
+<div class="filter-wrapper">
     <filter-dropdown label="Category:" [formControl]="categoryFilterCtrl" [data]="categories" textProperty="displayName"></filter-dropdown>
+    <month-picker [formControl]="monthCtrl" [max]="maxMonth"></month-picker>
 </div>
 
 <div class="table-wrapper">

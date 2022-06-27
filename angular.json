@@ -108,6 +108,11 @@
     },
     "expenses": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/expenses",
       "sourceRoot": "projects/expenses/src",
       "prefix": "lib",
@@ -139,6 +144,11 @@
     },
     "ngb-customization": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/ngb-customization",
       "sourceRoot": "projects/ngb-customization/src",
       "prefix": "lib",
@@ -170,6 +180,11 @@
     },
     "shared-components": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/shared-components",
       "sourceRoot": "projects/shared-components/src",
       "prefix": "lib",
@@ -195,37 +210,6 @@
             "main": "projects/shared-components/src/test.ts",
             "tsConfig": "projects/shared-components/tsconfig.spec.json",
             "karmaConfig": "projects/shared-components/karma.conf.js"
-          }
-        }
-      }
-    },
-    "environment": {
-      "projectType": "library",
-      "root": "projects/environment",
-      "sourceRoot": "projects/environment/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/environment/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/environment/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/environment/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/environment/src/test.ts",
-            "tsConfig": "projects/environment/tsconfig.spec.json",
-            "karmaConfig": "projects/environment/karma.conf.js"
           }
         }
       }

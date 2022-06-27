@@ -1,0 +1,23 @@
+<button type="button" class="filter-dropdown-button" #mainButton (click)="toggleDropdown()">
+    {{ label }}
+    <span class="value">{{ valueStr }}</span>
+    <i class="bi bi-caret-down-fill"></i>
+</button>
+
+<div *ngIf="isOpen" class="dropdown" #dropdown>
+    <div class="header-row">
+        <button type="button" class="btn header-button" (click)="decrementViewYear()" [disabled]="min && viewYear === min.year">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="header-year">{{ viewYear }}</div>
+        <button type="button" class="btn header-button" (click)="incrementViewYear()" [disabled]="max && viewYear === max.year">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+    <div class="month-buttons">
+        <button *ngFor="let mStr of months; index as i" type="button" class="btn" [ngClass]="{ selected: value && viewYear === value.year && i + 1 === value.month }"
+                (click)="selectMonth(i + 1, viewYear!)" [disabled]="(viewYear * 100 + i + 1) < minVal || (viewYear * 100 + i + 1) > maxVal">
+            {{ mStr }}
+        </button>
+    </div>
+</div>

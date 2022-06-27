@@ -1,19 +1,22 @@
-<ng-container *ngIf="activeGroup === null; else categoryDrilldown">
-    <loader *ngIf="loading; else content"></loader>
-    <ng-template #content>
-        <div *ngIf="drawing" class="drawing-overlay"></div>
-        <ngx-charts-pie-chart [view]="[300, 300]" [results]="expensesByGroup" [scheme]="colorSchemeName" [activeEntries]="activeEntries"
-                              [legend]="false" (activate)="itemHover($event)" (deactivate)="itemHover()" (select)="openDrilldown($event.name)">
-            <ng-template #tooltipTemplate let-model="model">
-                <div class="tooltip-header">{{ model.name }}</div>
-                <div class="tooltip-value">{{ model.value | currency }}</div>
-            </ng-template>
-        </ngx-charts-pie-chart>
-        <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByGroup" [activeIndex]="activeIndex"
-                      (itemHover)="itemHover($event)" (itemSelect)="openDrilldown($event)"></chart-legend>
+<month-picker [(ngModel)]="selectedMonth" (ngModelChange)="getExpensesByGroup()" label="Month:" [max]="maxMonth"></month-picker>
+<div class="chart-wrapper">
+    <ng-container *ngIf="activeGroup === null; else categoryDrilldown">
+        <loader *ngIf="loading; else content"></loader>
+        <ng-template #content>
+            <div *ngIf="drawing" class="drawing-overlay"></div>
+            <ngx-charts-pie-chart [view]="[300, 300]" [results]="expensesByGroup" [scheme]="colorSchemeName" [activeEntries]="activeEntries"
+                                [legend]="false" (activate)="itemHover($event)" (deactivate)="itemHover()" (select)="openDrilldown($event.name)">
+                <ng-template #tooltipTemplate let-model="model">
+                    <div class="tooltip-header">{{ model.name }}</div>
+                    <div class="tooltip-value">{{ model.value | currency }}</div>
+                </ng-template>
+            </ngx-charts-pie-chart>
+            <chart-legend [colorScheme]="colorSchemeName" [data]="expensesByGroup" [activeIndex]="activeIndex"
+                        (itemHover)="itemHover($event)" (itemSelect)="openDrilldown($event)"></chart-legend>
+        </ng-template>
+    </ng-container>
+    <ng-template #categoryDrilldown>
+        <recent-expenses-by-category [selectedMonth]="selectedMonth" [categoryGroupName]="activeGroup!.name" [categoryId]="activeGroup!.id" (exit)="closeDrilldown()">
+        </recent-expenses-by-category>
     </ng-template>
-</ng-container>
-<ng-template #categoryDrilldown>
-    <recent-expenses-by-category [categoryGroupName]="activeGroup!.name" [categoryId]="activeGroup!.id" (exit)="closeDrilldown()">
-    </recent-expenses-by-category>
-</ng-template>
+</div>

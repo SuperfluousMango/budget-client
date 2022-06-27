@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
+    combineLatest,
     debounceTime,
     distinctUntilChanged,
     first,
@@ -10,8 +11,10 @@ import {
     merge,
     Observable,
     OperatorFunction,
+    startWith,
     Subject,
     takeUntil,
+    tap,
     timer,
 } from 'rxjs';
 import { Expense } from '../models';
@@ -19,6 +22,7 @@ import { ExpenseCategory } from '../models/expense-category';
 import { ExpenseEntryComponent } from '../expense-entry/expense-entry.component';
 import { ExpenseFilterService } from '../expense-filter.service';
 import { ExpenseService } from '../expense.service';
+import { DateMonth } from '@lib-shared-components/month-picker/date-month';
 
 const EN_DASH = '–';
 const HYPHEN = '-';
@@ -35,6 +39,8 @@ export class ExpenseListComponent implements OnDestroy {
     categories: ExpenseCategory[] = [];
     categoryHash: { [key: number]: string } = {};
     categoryFilterCtrl = new FormControl();
+    monthCtrl: FormControl;
+    maxMonth: DateMonth;
     focus$ = new Subject<string>();
 
     private _destroy$ = new Subject<void>();
@@ -45,7 +51,9 @@ export class ExpenseListComponent implements OnDestroy {
         private readonly modalService: NgbModal,
         private readonly cdr: ChangeDetectorRef
     ) {
-        this.refreshExpenseList();
+        const date = new Date();
+        this.maxMonth = { month: date.getMonth() + 1, year: date.getFullYear() };
+        this.monthCtrl = new FormControl({ ...this.maxMonth });
 
         this.expenseService.categories$
             .pipe(takeUntil(this._destroy$))
@@ -56,32 +64,39 @@ export class ExpenseListComponent implements OnDestroy {
                     acc[val.id] = val.displayName;
                     return acc;
                 }, this.categoryHash);
+            });
 
-                this.expenseFilterService.filter$
-                    .pipe(first())
-                    .subscribe((filter) => {
-                        if (filter.categoryId) {
-                            const filteredCategory =
-                                this.categories.find(
-                                    (c) => c.id === filter.categoryId
-                                ) ?? null;
-                            this.categoryFilterCtrl.setValue(filteredCategory);
-                        }
-                    });
+        this.monthCtrl.valueChanges
+            .pipe(takeUntil(this._destroy$), distinctUntilChanged(), tap(x => console.log(x)))
+            .subscribe(() => this.updateExpenseFilter());
+
+        this.categoryFilterCtrl.valueChanges
+            .pipe(takeUntil(this._destroy$), distinctUntilChanged())
+            .subscribe(() => this.updateExpenseFilter());
+
+        this.expenseFilterService.filter$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe((filter) => {
+                const filteredCategory = filter.categoryId
+                    ? this.categories.find(
+                            (c) => c.id === filter.categoryId
+                        ) ?? null
+                    : null;
+
+                const filterMonth = filter.month
+                    ? { month: filter.month, year: filter.year }
+                    : this.maxMonth;
+
+                this.categoryFilterCtrl.setValue(filteredCategory, { emitEvent: false });
+                this.monthCtrl.setValue(filterMonth, { emitEvent: false });
+                this.refreshExpenseList();
             });
 
         this.expenseService.expenseListUpdate$
             .pipe(takeUntil(this._destroy$))
             .subscribe((expenseDate) => this.checkForRefresh(expenseDate));
 
-        this.categoryFilterCtrl.valueChanges
-            .pipe(takeUntil(this._destroy$), distinctUntilChanged())
-            .subscribe((val) => {
-                this.expenseFilterService.updateFilter({
-                    categoryId: val ? val.id : null,
-                });
-                this.refreshExpenseList();
-            });
+        this.updateExpenseFilter();
     }
 
     ngOnDestroy(): void {
@@ -123,6 +138,14 @@ export class ExpenseListComponent implements OnDestroy {
         comp.editMode = false;
         comp.expense = expense;
         comp.ngOnInit();
+    }
+
+    private updateExpenseFilter() {
+        this.expenseFilterService.updateFilter({
+            categoryId: this.categoryFilterCtrl.value?.id ?? null,
+            month: this.monthCtrl.value.month,
+            year: this.monthCtrl.value.year
+        });
     }
 
     private checkForRefresh(transDate: Date): void {

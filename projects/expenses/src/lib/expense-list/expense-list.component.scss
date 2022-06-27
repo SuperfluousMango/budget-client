@@ -1,3 +1,9 @@
+.filter-wrapper {
+    display: flex;
+    margin-block: 1rem;
+    gap: 1rem;
+}
+
 .table-wrapper {
     min-height: 300px;
     max-height: calc(100vh - 50px - 4.5rem - 2rem - 30.5px - 2vh); // header height, h1 height, button height, filter height, adjustment just because
