@@ -71,7 +71,7 @@ export class FilterDropdownComponent implements ControlValueAccessor, OnInit, On
         this.hideDropdown();
     }
 
-    toggleOpen(): void {
+    toggleDropdown(): void {
         this.isOpen = !this.isOpen;
         this.cdr.detectChanges();
 
@@ -105,7 +105,7 @@ export class FilterDropdownComponent implements ControlValueAccessor, OnInit, On
         // Allow the down arrow key to expand the dropdown if it's closed
         if (!this.isOpen) {
             if (event.key === 'ArrowDown') {
-                this.toggleOpen();
+                this.toggleDropdown();
                 event.preventDefault();
             }
             return;

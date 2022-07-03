@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExpenseFilterService, ExpensesByCategory, ExpenseService } from '@lib-expenses';
+import { DateMonth } from '@lib-shared-components/month-picker/date-month';
 import { first, Subject, takeUntil } from 'rxjs';
 
 type ExpensesByCategorySummary = { name: string; value: number };
@@ -10,9 +11,10 @@ type ExpensesByCategorySummary = { name: string; value: number };
     templateUrl: './recent-expenses-by-category.component.html',
     styleUrls: ['./recent-expenses-by-category.component.scss'],
 })
-export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
+export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy, OnChanges {
     @Input() categoryId: number = 0;
     @Input() categoryGroupName: string = '';
+    @Input() selectedMonth!: DateMonth;
     @Output() exit = new EventEmitter<void>();
 
     loading = true;
@@ -48,6 +50,12 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['selectedMonth']) {
+            this.getExpensesByCategory();
+        }
+    }
+
     goBack() {
         this.exit.emit();
     }
@@ -67,17 +75,13 @@ export class RecentExpensesByCategoryComponent implements OnInit, OnDestroy {
 
     openExpensesByCategory(event: string) {
         const categoryId = this.categoryData.find(x => x.name === event)?.id ?? null;
-        this.expenseFilterService.updateFilter({ categoryId });
+        this.expenseFilterService.updateFilter({ categoryId, month: this.selectedMonth.month, year: this.selectedMonth.year });
         this.router.navigate(['/expenses']);
     }
 
     private getExpensesByCategory() {
-        const date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth() + 1;
-
         this.expenseService
-            .getRecentExpensesByCategory(year, month, this.categoryId)
+            .getRecentExpensesByCategory(this.selectedMonth.year, this.selectedMonth.month, this.categoryId)
             .pipe(first())
             .subscribe((data) => {
                 this.categoryData = data;

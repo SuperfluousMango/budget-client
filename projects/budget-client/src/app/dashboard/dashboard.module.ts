@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExpensesLibraryModule } from '@lib-expenses';
 import { SharedComponentsModule } from '@lib-shared-components';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -27,6 +27,7 @@ import { RecentExpensesComponent } from './dashboard/recent-expenses/recent-expe
         ExpensesLibraryModule,
         NgxChartsModule,
         ReactiveFormsModule,
+        FormsModule,
         SharedComponentsModule,
     ],
 })

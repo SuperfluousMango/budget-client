@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ExpenseService } from '@lib-expenses';
+import { DateMonth } from '@lib-shared-components/month-picker/date-month';
 import { first, Subject, takeUntil } from 'rxjs';
 
 type ExpensesByGroupSummary = { id: number, name: string, value: number };
@@ -17,6 +18,8 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
     activeIndex = -1;
     legendData: string[] = [];
 
+    selectedMonth: DateMonth;
+    readonly maxMonth: DateMonth;
     activeGroup: ExpensesByGroupSummary | null = null;
 
     colorSchemeName: string;
@@ -25,6 +28,12 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
 
     constructor(private readonly expenseService: ExpenseService) {
         this.colorSchemeName = 'vivid';
+        const date = new Date();
+        this.selectedMonth = {
+            month: date.getMonth() + 1,
+            year: date.getFullYear()
+        };
+        this.maxMonth = { ...this.selectedMonth };
 
         this.getExpensesByGroup();
 
@@ -61,12 +70,8 @@ export class RecentExpensesByGroupComponent implements OnDestroy {
         this.preventHoverWhileDrawing();
     }
 
-    private getExpensesByGroup() {
-        const date = new Date(),
-            year = date.getFullYear(),
-            month = date.getMonth() + 1;
-
-        this.expenseService.getRecentExpensesByGroup(year, month)
+    getExpensesByGroup() {
+        this.expenseService.getRecentExpensesByGroup(this.selectedMonth.year, this.selectedMonth.month)
             .pipe(first())
             .subscribe(data => {
                 this.expensesByGroup = data.map(x => ({ id: x.id, name: x.name, value: x.total }));

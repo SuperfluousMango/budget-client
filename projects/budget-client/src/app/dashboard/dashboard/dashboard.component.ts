@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'dashboard',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+    ctrl = new FormControl();
     constructor() { }
 }

@@ -4,18 +4,21 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CardComponent } from './card/card.component';
 import { FilterDropdownComponent } from './filter-dropdown/filter-dropdown.component';
 import { LoaderComponent } from './loader/loader.component';
+import { MonthPickerComponent } from './month-picker/month-picker.component';
 
 @NgModule({
     declarations: [
         CardComponent,
         FilterDropdownComponent,
-        LoaderComponent
+        LoaderComponent,
+        MonthPickerComponent
     ],
     imports: [CommonModule, NgbModule],
     exports: [
         CardComponent,
         FilterDropdownComponent,
-        LoaderComponent
+        LoaderComponent,
+        MonthPickerComponent
     ],
 })
 export class SharedComponentsModule {}
