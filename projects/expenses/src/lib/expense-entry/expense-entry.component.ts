@@ -1,9 +1,9 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@lib-ngb-customization';
 import { ConfirmDialogService } from '@lib-shared-components';
-import { debounceTime, distinctUntilChanged, filter, map, merge, Observable, of, OperatorFunction, Subject, switchMap, takeUntil } from 'rxjs';
+import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, merge, Observable, of, OperatorFunction, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { ExpenseCategoryEntryComponent } from '../expense-category-entry/expense-category-entry.component';
 import { ExpenseService } from '../expense.service';
 import { Expense, ExpenseCategory } from '../models';
@@ -119,7 +119,8 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
         okToSave
             .pipe(
                 filter(x => !!x),
-                switchMap(() => this.expenseService.saveExpense({ ...this.form.value, categoryId: this.form.value.category.id }))
+                switchMap(() => this.expenseService.saveExpense({ ...this.form.value, categoryId: this.form.value.category.id })),
+                catchError(errResponse => errResponse.status === 409 ? this.resolveSaveConflict(errResponse.error) : throwError(errResponse))
             )
             .subscribe(() => {
                 this.toastService.showSuccess("Your expense was successfully saved.");
@@ -200,5 +201,30 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
         if (this.categories.length && this.expense) {
             this.expenseCategoryText = this.categories.find(c => c.id === this.expense?.expenseCategoryId)?.displayName;
         }
+    }
+
+    private resolveSaveConflict(conflictResolutionData: any): Observable<any> {
+        const existingDate = new Date(conflictResolutionData.existingDate),
+            createdDate = new Date(conflictResolutionData.createdDate),
+            duplicateData = conflictResolutionData.duplicateData,
+            existingDateStr = `${existingDate.getMonth() + 1}/${existingDate.getDate()}/${existingDate.getFullYear()}`,
+            createdDateStr = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`,
+            dateStr = existingDateStr === createdDateStr
+                ? existingDateStr
+                : `${existingDateStr} (created ${createdDateStr})`;
+
+        const title = 'Duplicate Expense',
+            message = `This expense may be a duplicate of an expense from ${dateStr}. Are you sure you want to save it?`,
+            confirmButtonText = `Yes, I'm sure`,
+            cancelButtonText = `No, I'd like to go back`;
+
+        return this.confirmDialogService.createConfirmDialog(message, title, confirmButtonText, cancelButtonText)
+            .pipe(
+                switchMap(result => {
+                    return !!result
+                        ? this.expenseService.saveExpense(duplicateData, true)
+                        : throwError(() => new Error('Canceled save of duplicate expense.'));
+                })
+            );
     }
 }
