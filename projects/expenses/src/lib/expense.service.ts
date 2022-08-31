@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { first, map, Observable, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
-import { ENVIRONMENT } from './environment-token';
+import { ENVIRONMENT } from '../../../environment-token';
 import { ExpenseFilterService } from './expense-filter.service';
 import { Expense, ExpensesByCategory, ExpensesByGroup } from './models';
 import { ExpenseCategoryGroup } from './models/expense-category';

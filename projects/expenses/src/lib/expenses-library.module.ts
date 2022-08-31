@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedComponentsModule } from '@lib-shared-components';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ENVIRONMENT } from './environment-token';
+import { ENVIRONMENT } from '../../../environment-token';
 import { ExpenseCategoryEntryComponent } from './expense-category-entry/expense-category-entry.component';
 import { ExpenseEntryComponent } from './expense-entry/expense-entry.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
