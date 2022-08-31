@@ -55,10 +55,10 @@ export class ExpenseService implements OnDestroy {
             );
     }
 
-    saveExpense(expense: Expense): Observable<void> {
+    saveExpense(expense: Expense, ignoreDuplicates = false): Observable<void> {
         return expense.id
             ? this.updateExpense(expense)
-            : this.createExpense(expense);
+            : this.createExpense(expense, ignoreDuplicates);
     }
 
     deleteExpense(expense: Expense): Observable<void> {
@@ -98,8 +98,12 @@ export class ExpenseService implements OnDestroy {
             .subscribe(data => this._categorySubj$.next(data));
     }
 
-    private createExpense(expense: Expense): Observable<void> {
-        const url = `${this.environment.apiUrl}/api/Expense`;
+    private createExpense(expense: Expense, ignoreDuplicates: boolean): Observable<void> {
+        let url = `${this.environment.apiUrl}/api/Expense`;
+        if (ignoreDuplicates) {
+            url += '?ignoreDuplicates=true';
+        }
+
         return this.httpClient.post<void>(url, expense)
             .pipe(
                 tap(() => this._expenseListUpdateSubj.next(expense.transactionDate))
