@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@lib-ngb-customization';
 import { ConfirmDialogService } from '@lib-shared-components';
-import { debounceTime, distinctUntilChanged, map, merge, Observable, OperatorFunction, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, merge, Observable, of, OperatorFunction, Subject, switchMap, takeUntil } from 'rxjs';
 import { ExpenseCategoryEntryComponent } from '../expense-category-entry/expense-category-entry.component';
 import { ExpenseService } from '../expense.service';
 import { Expense, ExpenseCategory } from '../models';
@@ -57,7 +57,13 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
             });
 
         const date = new Date();
-        this.maxDate = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        const fifteenDaysInMilliseconds = 15 * 24 * 60 * 60 * 1000,
+            maxDate = new Date(date.getTime() + fifteenDaysInMilliseconds);
+        this.maxDate = { year: maxDate.getFullYear(), month: maxDate.getMonth() + 1, day: maxDate.getDate() };
     }
 
     ngOnInit(): void {
@@ -96,7 +102,25 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
         // NgbDatepicker tries to be clever and sets the time on our dates to noon, in order to keep the UTC
         // date that JS passes to the API the same as the local date. Since we're only saving the date and
         // don't care about the time, that is acceptable.
-        this.expenseService.saveExpense({ ...this.form.value, categoryId: this.form.value.category.id })
+        const formDate = this.form.controls['transactionDate'].value,
+            fifteenDaysInMilliseconds = 15 * 24 * 60 * 60 * 1000,
+            minDate = new Date(new Date().getTime() - fifteenDaysInMilliseconds);
+
+            
+        const title = 'Confirm Old Expense',
+            message = `Your expense date is more than 15 days in the past. Are you sure this is the correct date?`,
+            confirmButtonText = `Yes, I'm sure`,
+            cancelButtonText = `No, I'd like to go back`;
+
+        const okToSave = formDate < minDate
+            ? this.confirmDialogService.createConfirmDialog(message, title, confirmButtonText, cancelButtonText)
+            : of(true);
+
+        okToSave
+            .pipe(
+                filter(x => !!x),
+                switchMap(() => this.expenseService.saveExpense({ ...this.form.value, categoryId: this.form.value.category.id }))
+            )
             .subscribe(() => {
                 this.toastService.showSuccess("Your expense was successfully saved.");
                 if (this.expense) {
