@@ -18,7 +18,7 @@ export class RecentExpensesComponent {
         private readonly router: Router,
         private readonly modalService: NgbModal
     ) {
-        this.updateRecentExpenses();
+        this.fetchRecentExpenses();
     }
 
     viewExpense(id: number): void {
@@ -30,13 +30,13 @@ export class RecentExpensesComponent {
                 comp.expense = expense;
                 comp.ngOnInit();
 
-                modalInstance.closed.subscribe(() => this.updateRecentExpenses());
+                modalInstance.closed.subscribe(() => this.fetchRecentExpenses());
             });
     }
 
     createExpense(): void {
         const modalInstance = this.modalService.open(ExpenseEntryComponent);
-        modalInstance.closed.subscribe(() => this.updateRecentExpenses());
+        modalInstance.closed.subscribe(() => this.fetchRecentExpenses());
     }
 
     viewExpenseList(): void {
@@ -44,7 +44,7 @@ export class RecentExpensesComponent {
         this.router.navigate(['/expenses']);
     }
 
-    private updateRecentExpenses() {
+    private fetchRecentExpenses() {
         this.expenseService.getRecentExpenses()
             .subscribe(data => {
                 this.recentExpenses = data;

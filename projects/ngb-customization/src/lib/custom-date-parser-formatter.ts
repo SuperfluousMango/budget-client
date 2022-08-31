@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 import { NgbDateParserFormatter, NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CustomDateParserFormatter extends NgbDateParserFormatter {
     private static readonly DELIMITER_REGEX = /[-.\\]/g;
 

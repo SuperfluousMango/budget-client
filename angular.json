@@ -15,7 +15,7 @@
       },
       "root": "projects/budget-client",
       "sourceRoot": "projects/budget-client/src",
-      "prefix": "app",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -115,7 +115,7 @@
       },
       "root": "projects/expenses",
       "sourceRoot": "projects/expenses/src",
-      "prefix": "lib",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -151,7 +151,7 @@
       },
       "root": "projects/ngb-customization",
       "sourceRoot": "projects/ngb-customization/src",
-      "prefix": "lib",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -187,7 +187,7 @@
       },
       "root": "projects/shared-components",
       "sourceRoot": "projects/shared-components/src",
-      "prefix": "lib",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
