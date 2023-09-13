@@ -16,20 +16,33 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "lib": [
       "es2020",
       "dom"
     ],
     "paths": {
-      "@lib-expenses": [ "projects/expenses/src/lib/" ],
-      "@lib-expenses/*": [ "projects/expenses/src/lib/*" ],
-      "@lib-ngb-customization": [ "projects/ngb-customization/src/lib/" ],
-      "@lib-ngb-customization/*": [ "projects/ngb-customization/src/lib/*" ],
-      "@lib-shared-components": [ "projects/shared-components/src/lib/" ],
-      "@lib-shared-components/*": [ "projects/shared-components/src/lib/*" ]
-    }
+      "@lib-expenses": [
+        "projects/expenses/src/lib/"
+      ],
+      "@lib-expenses/*": [
+        "projects/expenses/src/lib/*"
+      ],
+      "@lib-ngb-customization": [
+        "projects/ngb-customization/src/lib/"
+      ],
+      "@lib-ngb-customization/*": [
+        "projects/ngb-customization/src/lib/*"
+      ],
+      "@lib-shared-components": [
+        "projects/shared-components/src/lib/"
+      ],
+      "@lib-shared-components/*": [
+        "projects/shared-components/src/lib/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
