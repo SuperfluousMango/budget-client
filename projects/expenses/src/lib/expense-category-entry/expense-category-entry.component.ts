@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ToastService } from '@lib-ngb-customization';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, map, merge, Observable, OperatorFunction, Subject, switchMap } from 'rxjs';
@@ -23,7 +23,7 @@ export class ExpenseCategoryEntryComponent {
 
     constructor(
         private readonly expenseService: ExpenseService,
-        private readonly fb: FormBuilder,
+        private readonly fb: UntypedFormBuilder,
         private readonly modalInstance: NgbActiveModal,
         private readonly toastService: ToastService
     ) {

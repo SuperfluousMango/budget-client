@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
     selector: 'dashboard',
@@ -7,6 +7,6 @@ import { FormControl } from '@angular/forms';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-    ctrl = new FormControl();
+    ctrl = new UntypedFormControl();
     constructor() { }
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ToastService } from '@lib-ngb-customization';
 import { ConfirmDialogService } from '@lib-shared-components';
 import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -43,7 +43,7 @@ export class ExpenseEntryComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly expenseService: ExpenseService,
-        private readonly fb: FormBuilder,
+        private readonly fb: UntypedFormBuilder,
         private readonly modalInstance: NgbActiveModal,
         private readonly modalService: NgbModal,
         private readonly toastService: ToastService,

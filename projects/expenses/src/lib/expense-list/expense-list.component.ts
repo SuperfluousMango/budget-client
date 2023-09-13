@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
     combineLatest,
@@ -38,8 +38,8 @@ export class ExpenseListComponent implements OnDestroy {
     expenses: Expense[] = [];
     categories: ExpenseCategory[] = [];
     categoryHash: { [key: number]: string } = {};
-    categoryFilterCtrl = new FormControl();
-    monthCtrl: FormControl;
+    categoryFilterCtrl = new UntypedFormControl();
+    monthCtrl: UntypedFormControl;
     maxMonth: DateMonth;
     focus$ = new Subject<string>();
 
@@ -53,7 +53,7 @@ export class ExpenseListComponent implements OnDestroy {
     ) {
         const date = new Date();
         this.maxMonth = { month: date.getMonth() + 1, year: date.getFullYear() };
-        this.monthCtrl = new FormControl({ ...this.maxMonth });
+        this.monthCtrl = new UntypedFormControl({ ...this.maxMonth });
 
         this.expenseService.categories$
             .pipe(takeUntil(this._destroy$))

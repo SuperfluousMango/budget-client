@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, UntypedFormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 const PAGE_SIZE = 7; // If this is updated, also update the SCSS
@@ -22,7 +22,7 @@ export class FilterDropdownComponent implements ControlValueAccessor, OnInit, On
     @ViewChild('mainButton') mainButton?: ElementRef;
     @ViewChild('dropdown') dropdown?: ElementRef;
 
-    ctrl = new FormControl();
+    ctrl = new UntypedFormControl();
     isOpen = false;
     selectedIndex = -1;
     focusIndex = -1;
